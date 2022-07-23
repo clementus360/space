@@ -1,19 +1,36 @@
 import { useState, useRef, useEffect } from "react";
 
-import { userStream, mute } from "../utils/getUserStream";
+import { userStream } from "../utils/getUserStream";
+
+import { useAppDispatch, useAppSelector } from "../redux/hooks";
+import {
+  toggleAudioStream,
+  toggleVideoStream,
+} from "../redux/mediastreamSlice";
 
 import Image from "next/image";
 import Link from "next/link";
 
 export default function Home() {
-  const [streamType, setStreamType] = useState("camera");
-  const userVideo = useRef();
+  const mediaConstraints = useAppSelector((state) => state.mediaConstraints);
+  const dispatch = useAppDispatch();
+
+  const userVideo = useRef<HTMLVideoElement>();
 
   useEffect(() => {
-    userStream(streamType).then((stream) => {
+    userStream(mediaConstraints).then((stream) => {
       userVideo.current.srcObject = stream;
+      userVideo.current.muted = true;
     });
-  }, [streamType, mute]);
+  }, [mediaConstraints]);
+
+  const toggleSound = () => {
+    dispatch(toggleAudioStream());
+  };
+
+  const toggleVideo = () => {
+    dispatch(toggleVideoStream());
+  };
 
   return (
     <div>
@@ -22,8 +39,8 @@ export default function Home() {
           <div className="flex gap-8 md:gap-16">
             <Image
               src="/images/vector.svg"
+              onClick={toggleSound}
               alt="audio control"
-              onClick={mute}
               width={30}
               height={30}
             />
@@ -34,6 +51,7 @@ export default function Home() {
             />
             <Image
               src="/images/vector-1.svg"
+              onClick={toggleVideo}
               alt="video control"
               width={30}
               height={30}

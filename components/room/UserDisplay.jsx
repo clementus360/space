@@ -1,8 +1,19 @@
-export default function Display() {
+import { useEffect, useRef } from "react";
+
+export default function Display({ userName, stream }) {
+  const userVideo = useRef();
+
+  useEffect(() => {
+    userVideo.current.srcObject = stream;
+  }, [stream]);
   return (
     <div className="flex ml-2 mr-2 h-max flex-col items-center">
-      <video className="w-24 h-24 max-w-none md:w-32 md:h-32 bg-darkBlack border-4 border-darkGreen rounded-full" />
-      <p>username</p>
+      <video
+        ref={userVideo}
+        autoPlay
+        className="w-24 h-24 object-cover max-w-none md:w-32 md:h-32 bg-darkBlack border-4 border-darkGreen rounded-full"
+      />
+      <p>{userName}</p>
     </div>
   );
 }

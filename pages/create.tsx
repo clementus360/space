@@ -1,31 +1,53 @@
 import { useState, useRef, useEffect } from "react";
 
-import { withRouter } from "next/router";
 import Image from "next/image";
 import Link from "next/link";
+import { withRouter } from "next/router";
+
+import uniqid from "uniqid";
 
 import { userStream } from "../utils/getUserStream";
 
-function Join(props) {
-  const [streamType, setStreamType] = useState("camera");
-  const [room, setRoom] = useState("");
-  const userVideo = useRef();
+import { useAppDispatch, useAppSelector } from "../redux/hooks";
+import {
+  toggleAudioStream,
+  toggleVideoStream,
+} from "../redux/mediastreamSlice";
+import { setRoom } from "../redux/roomSlice";
+
+const Create = (props) => {
+  const mediaConstraints = useAppSelector((state) => state.mediaConstraints);
+  const dispatch = useAppDispatch();
+
+  const userVideo = useRef<HTMLVideoElement>();
+  const userName = useRef<HTMLInputElement>();
+  const roomName = useRef<HTMLInputElement>();
 
   useEffect(() => {
-    userStream(streamType).then((stream) => {
+    userStream(mediaConstraints).then((stream) => {
       userVideo.current.srcObject = stream;
     });
-  }, [streamType]);
+  }, [mediaConstraints]);
 
-  const joinRoom = () => {
-    const roomId = room;
+  const createRoom = () => {
+    const roomId = uniqid();
     props.router.push({
       pathname: `/room/${roomId}`,
     });
+    dispatch(
+      setRoom({
+        roomName: roomName.current.value,
+        userName: userName.current.value,
+      })
+    );
   };
 
-  const handleChange = (e) => {
-    setRoom(e.target.value);
+  const toggleSound = () => {
+    dispatch(toggleAudioStream());
+  };
+
+  const toggleVideo = () => {
+    dispatch(toggleVideoStream());
   };
 
   return (
@@ -35,6 +57,7 @@ function Join(props) {
           <div className="flex gap-8 md:gap-16">
             <Image
               src="/images/vector.svg"
+              onClick={toggleSound}
               alt="audio control"
               width={30}
               height={30}
@@ -46,6 +69,7 @@ function Join(props) {
             />
             <Image
               src="/images/vector-1.svg"
+              onClick={toggleVideo}
               alt="video control"
               width={30}
               height={30}
@@ -56,29 +80,29 @@ function Join(props) {
             <input
               type="text"
               placeholder="Username"
-              className="w-64 pl-4 p-2 rounded-md"
+              ref={userName}
+              className="w-64 pl-4 p-2 rounded-md text-darkBlack"
             />
             <input
               type="text"
-              placeholder="Space code"
-              value={room}
-              onChange={handleChange}
+              placeholder="Space name"
+              ref={roomName}
               className="w-64 pl-4 p-2 rounded-md text-darkBlack"
             />
             <button
               onClick={(e) => {
                 e.preventDefault();
-                joinRoom();
+                createRoom();
               }}
-              className="w-max bg-lightRed text-darkBlack p-5 rounded-md font-medium "
+              className="w-max bg-lightGreen text-darkBlack p-5 rounded-md font-medium "
             >
-              Join space
+              Create space
             </button>
             <p className="text-lightGrey">
               You can also{" "}
-              <Link href="/create">
+              <Link href="/join">
                 <span className="text-blue-700 cursor-pointer">
-                  Create a new space
+                  Join an existing space
                 </span>
               </Link>
             </p>
@@ -87,6 +111,6 @@ function Join(props) {
       </section>
     </div>
   );
-}
+};
 
-export default withRouter(Join);
+export default withRouter(Create);

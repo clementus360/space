@@ -1,8 +1,13 @@
 import Image from "next/image";
 import Link from "next/link";
 import Head from "next/head";
+import React from "react";
 
-export default function Layout({ children }) {
+interface Props {
+  children: React.ReactNode;
+}
+
+export default function Layout({ children }: Props) {
   return (
     <>
       <Head>
