@@ -1,10 +1,11 @@
 import { useEffect, useRef } from "react";
 
-export default function Display({ userName, stream }) {
+export default function Display({ userName, stream, muted }) {
   const userVideo = useRef();
 
   useEffect(() => {
     userVideo.current.srcObject = stream;
+    userVideo.current.muted = muted;
   }, [stream]);
   return (
     <div className="flex ml-2 mr-2 h-max flex-col items-center">

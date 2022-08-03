@@ -33,6 +33,7 @@ function Join(props) {
   useEffect(() => {
     userStream(mediaConstraints).then((stream) => {
       userVideo.current.srcObject = stream;
+      userVideo.current.muted = true;
     });
   }, [mediaConstraints]);
 
@@ -40,7 +41,7 @@ function Join(props) {
     const roomId = roomName.current.value;
     dispatch(
       setRoom({
-        roomName: roomName.current.value,
+        type: "Participant",
         userName: userName.current.value,
       })
     );

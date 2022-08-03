@@ -6,8 +6,12 @@ import Image from "next/image";
 
 import { userStream } from "../../utils/getUserStream";
 
-import { socketInitialization } from "../../utils/socketConnection";
+import {
+  socketInitialization,
+  socketConnection,
+} from "../../utils/socketConnection";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
+import { setRoomName } from "../../redux/roomSlice";
 
 import Display from "../../components/room/UserDisplay";
 import Footer from "../../components/room/Footer";
@@ -16,7 +20,8 @@ import Feed from "../../components/room/UserFeed";
 export default function Room() {
   const roomInfo = useAppSelector((state) => state.roomInfo);
   const mediaConstraints = useAppSelector((state) => state.mediaConstraints);
-  console.log(roomInfo);
+  const [socket, setSocket] = useState(socketInitialization());
+  const dispatch = useAppDispatch();
 
   const [myStream, setMyStream] = useState<MediaStream>();
 
@@ -26,19 +31,25 @@ export default function Room() {
   useEffect(() => {
     userStream(mediaConstraints).then((stream) => {
       setMyStream(stream);
-      console.log(myStream);
     });
   }, [mediaConstraints]);
 
   useEffect(() => {
-    socketInitialization(path);
+    socketConnection(path, roomInfo, socket);
+    socket.on("room-name", async (message) => {
+      dispatch(setRoomName(message));
+    });
   }, []);
 
   return (
     <>
       <div className="h-max w-full md:w-8/12 m-auto flex flex-col-reverse justify-between md:flex-row gap-4">
         <section className="bg-darkGrey flex md:flex-col items-center gap-4 w-full md:w-max h-max md:max-h-[75vh] 2xl:max-h-[80vh] rounded-md p-4 md:p-8 overflow-x-scroll md:overflow-y-scroll md:overflow-x-hidden">
-          <Display userName={roomInfo.userName} stream={myStream} />
+          <Display
+            userName={roomInfo.userName}
+            stream={myStream}
+            muted={true}
+          />
         </section>
         <section className="bg-darkGrey w-full p-4 rounded-md flex flex-col items-center">
           <div className="flex items-center gap-2 mb-4">

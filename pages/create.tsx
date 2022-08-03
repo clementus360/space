@@ -26,6 +26,7 @@ const Create = (props) => {
   useEffect(() => {
     userStream(mediaConstraints).then((stream) => {
       userVideo.current.srcObject = stream;
+      userVideo.current.muted = true;
     });
   }, [mediaConstraints]);
 
@@ -36,6 +37,7 @@ const Create = (props) => {
     });
     dispatch(
       setRoom({
+        type: "Admin",
         roomName: roomName.current.value,
         userName: userName.current.value,
       })

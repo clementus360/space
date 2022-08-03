@@ -1,29 +1,37 @@
 import { ParsedUrlQuery } from "querystring";
-import { io } from "socket.io-client";
+import { io, Socket } from "socket.io-client";
 
-const socket = io("http://localhost:5000");
+// const socket = io("http://localhost:5000");
 // const socket = io(process.env.HEROKU_URL);
 // const socket = io(process.env.CYCLIC_URL);
+
+interface RoomInfo {
+  type: String;
+  roomName?: String;
+  userName: String;
+}
 
 const config = {
   iceServers: [{ urls: "stun:stun.l.google.com:19302" }],
 };
+function socketInitialization() {
+  return io(process.env.HEROKU_URL);
+}
 
-function socketInitialization(path: ParsedUrlQuery) {
+function socketConnection(path: ParsedUrlQuery, roomInfo: RoomInfo, socket) {
   socket.on("connect", async () => {
     socket.emit("client-connected", {
-      clientId: socket.id,
       roomId: path.room,
+      roomName: roomInfo.roomName,
+      clientType: roomInfo.type,
+      clientId: socket.id,
+      clientName: roomInfo.userName,
     });
   });
 
   socket.on("user-connected", async (message) => {
     console.log(message);
   });
-
-  socket.on("connection-done", () => {
-    console.log("wow");
-  });
 }
 
-export { socketInitialization };
+export { socketInitialization, socketConnection };
