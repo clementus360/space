@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { io, Socket } from "socket.io-client";
 
 import { useRouter } from "next/router";
 import Image from "next/image";
@@ -17,10 +16,13 @@ import Display from "../../components/room/UserDisplay";
 import Footer from "../../components/room/Footer";
 import Feed from "../../components/room/UserFeed";
 
+import { soup, deviceInitialization } from "../../utils/mediasoup";
+
 export default function Room() {
   const roomInfo = useAppSelector((state) => state.roomInfo);
   const mediaConstraints = useAppSelector((state) => state.mediaConstraints);
   const [socket, setSocket] = useState(socketInitialization());
+  const [device, setDevice] = useState(deviceInitialization());
   const dispatch = useAppDispatch();
 
   const [myStream, setMyStream] = useState<MediaStream>();
@@ -39,6 +41,10 @@ export default function Room() {
     socket.on("room-name", async (message) => {
       dispatch(setRoomName(message));
     });
+  }, []);
+
+  useEffect(() => {
+    soup(socket);
   }, []);
 
   return (
