@@ -1,9 +1,5 @@
 import { ParsedUrlQuery } from "querystring";
-import { io, Socket } from "socket.io-client";
-
-// const socket = io("http://localhost:5000");
-// const socket = io(process.env.HEROKU_URL);
-// const socket = io(process.env.CYCLIC_URL);
+import { io } from "socket.io-client";
 
 interface RoomInfo {
   type: String;
@@ -16,23 +12,24 @@ const config = {
 };
 
 function socketInitialization() {
-  // return io(process.env.HEROKU_URL);
-  return io("http://127.0.0.1:5000");
+  // return io(process.env.GCLOUD_URL);
+  return io(process.env.DEV_URL);
 }
 
-function socketConnection(path: ParsedUrlQuery, roomInfo: RoomInfo, socket) {
-  console.log("trap");
-  socket.emit("client-connected", {
+let roomName: String;
+
+async function socketConnection(
+  path: ParsedUrlQuery,
+  roomInfo: RoomInfo,
+  socket
+) {
+  await socket.emit("client-connected", {
     roomId: path.room,
     roomName: roomInfo.roomName,
     clientType: roomInfo.type,
     clientId: socket.id,
     clientName: roomInfo.userName,
   });
-
-  socket.on("user-connected", async (message) => {
-    console.log(message);
-  });
 }
 
-export { socketInitialization, socketConnection };
+export { socketInitialization, socketConnection, roomName };

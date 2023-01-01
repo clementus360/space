@@ -1,28 +1,36 @@
+// REACT & NEXT LIBRARY IMPORTS
 import { useEffect, useState } from "react";
-
 import { useRouter } from "next/router";
 import Image from "next/image";
 
+// CUSTOM FUNCTIONS IMPORT
 import { userStream } from "../../utils/getUserStream";
-
 import {
   socketInitialization,
   socketConnection,
+  roomName,
 } from "../../utils/socketConnection";
+
+import {
+  consumerInitializations,
+  deviceInitialization,
+  producerInitialization,
+} from "../../utils/mediasoup";
+
+// REDUX IMPORTS
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { setRoomName } from "../../redux/roomSlice";
 
+// COMPONENT IMPORTS
 import Display from "../../components/room/UserDisplay";
 import Footer from "../../components/room/Footer";
 import Feed from "../../components/room/UserFeed";
 
-import { soup, deviceInitialization } from "../../utils/mediasoup";
-
 export default function Room() {
   const roomInfo = useAppSelector((state) => state.roomInfo);
   const mediaConstraints = useAppSelector((state) => state.mediaConstraints);
+  const [tracks, setTracks] = useState([]);
   const [socket, setSocket] = useState(socketInitialization());
-  const [device, setDevice] = useState(deviceInitialization());
   const dispatch = useAppDispatch();
 
   const [myStream, setMyStream] = useState<MediaStream>();
@@ -31,20 +39,25 @@ export default function Room() {
   const path = router.query;
 
   useEffect(() => {
-    userStream(mediaConstraints).then((stream) => {
-      setMyStream(stream);
-    });
-  }, [mediaConstraints]);
-
-  useEffect(() => {
     socketConnection(path, roomInfo, socket);
-    socket.on("room-name", async (message) => {
-      dispatch(setRoomName(message));
+    socket.on("setup-info", async (message) => {
+      if (message.roomName) {
+        dispatch(setRoomName(message.roomName));
+      }
+      deviceInitialization(message, socket).then(() => {
+        userStream(mediaConstraints).then((stream) => {
+          setMyStream(stream);
+          producerInitialization(stream, socket);
+        });
+      });
     });
-  }, []);
 
-  useEffect(() => {
-    soup(socket);
+    socket.on("new-consumer", async (data) => {
+      const stream = await consumerInitializations(data);
+      setTracks((track) => {
+        return [...track, stream];
+      });
+    });
   }, []);
 
   return (
@@ -56,6 +69,9 @@ export default function Room() {
             stream={myStream}
             muted={true}
           />
+          {tracks.map((stream) => (
+            <Display userName={"aaaaaa"} stream={stream} muted={true} />
+          ))}
         </section>
         <section className="bg-darkGrey w-full p-4 rounded-md flex flex-col items-center">
           <div className="flex items-center gap-2 mb-4">
