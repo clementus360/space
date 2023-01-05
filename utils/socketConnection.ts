@@ -12,7 +12,13 @@ const config = {
 };
 
 function socketInitialization() {
-  return io(process.env.GCLOUD_URL);
+  return io(process.env.GCLOUD_URL, {
+    withCredentials: true,
+    extraHeaders: {
+      "access-token": "abcd",
+    },
+  });
+  // return io(process.env.DEV_URL);
 }
 
 let roomName: String;
