@@ -12,8 +12,7 @@ const config = {
 };
 
 function socketInitialization() {
-  // return io(process.env.GCLOUD_URL);
-  return io(process.env.DEV_URL);
+  return io(process.env.GCLOUD_URL);
 }
 
 let roomName: String;
