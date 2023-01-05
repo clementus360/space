@@ -69,8 +69,13 @@ export default function Room() {
             stream={myStream}
             muted={true}
           />
-          {tracks.map((stream) => (
-            <Display userName={"aaaaaa"} stream={stream} muted={true} />
+          {tracks.map((stream, idx) => (
+            <Display
+              key={idx}
+              userName={"aaaaaa"}
+              stream={stream}
+              muted={true}
+            />
           ))}
         </section>
         <section className="bg-darkGrey w-full p-4 rounded-md flex flex-col items-center">
