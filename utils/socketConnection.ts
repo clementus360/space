@@ -12,7 +12,7 @@ const config = {
 };
 
 function socketInitialization() {
-  return io(process.env.GCLOUD_URL, {
+  return io(process.env.AWS_URL, {
     withCredentials: true,
     extraHeaders: {
       "access-token": "abcd",
