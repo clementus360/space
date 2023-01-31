@@ -12,12 +12,7 @@ const config = {
 };
 
 function socketInitialization() {
-  return io(process.env.AWS_URL, {
-    withCredentials: true,
-    extraHeaders: {
-      "access-token": "abcd",
-    },
-  });
+  return io(process.env.AWS_URL);
   // return io(process.env.DEV_URL);
 }
 
