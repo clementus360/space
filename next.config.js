@@ -7,6 +7,7 @@ const nextConfig = {
     CYCLIC_URL: process.env.CYCLIC_URL,
     HEROKU_URL: process.env.HEROKU_URL,
     GCLOUD_URL: process.env.GCLOUD_URL,
+    AWS_URL: process.env.AWS_URL,
   },
 };
 
