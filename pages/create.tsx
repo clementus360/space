@@ -58,7 +58,7 @@ const Create = (props) => {
         <div className="flex flex-col gap-8 items-center">
           <div className="flex gap-8 md:gap-16">
             <Image
-              src="/images/vector.svg"
+              src="/images/audio.svg"
               onClick={toggleSound}
               alt="audio control"
               width={30}
@@ -70,7 +70,7 @@ const Create = (props) => {
               className="w-56 h-56 object-cover bg-black rounded-full"
             />
             <Image
-              src="/images/vector-1.svg"
+              src="/images/video.svg"
               onClick={toggleVideo}
               alt="video control"
               width={30}

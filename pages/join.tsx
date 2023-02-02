@@ -64,7 +64,7 @@ function Join(props) {
         <div className="flex flex-col gap-8 items-center">
           <div className="flex gap-8 md:gap-16">
             <Image
-              src="/images/vector.svg"
+              src="/images/audio.svg"
               alt="audio control"
               onClick={toggleSound}
               width={30}
@@ -76,7 +76,7 @@ function Join(props) {
               className="w-56 h-56 object-cover bg-black rounded-full"
             />
             <Image
-              src="/images/vector-1.svg"
+              src="/images/video.svg"
               alt="video control"
               onClick={toggleVideo}
               width={30}

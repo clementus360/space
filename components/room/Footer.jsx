@@ -10,19 +10,19 @@ export default function Footer() {
         height={30}
       />
       <Image
-        src="/images/vector.svg"
+        src="/images/audio.svg"
         alt="audio control"
         width={30}
         height={30}
       />
       <Image
-        src="/images/vector-1.svg"
+        src="/images/video.svg"
         alt="video control"
         width={30}
         height={30}
       />
       <Image
-        src="/images/vector-2.svg"
+        src="/images/screen.svg"
         alt="screen control"
         width={30}
         height={30}
