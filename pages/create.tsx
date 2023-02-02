@@ -15,9 +15,6 @@ import {
 } from "../redux/mediastreamSlice";
 import { setRoom } from "../redux/roomSlice";
 
-import VideoIcon from "../public/images/vector-1.svg";
-import AudioIcon from "../public/images/vector.svg";
-
 const Create = (props) => {
   const mediaConstraints = useAppSelector((state) => state.mediaConstraints);
   const dispatch = useAppDispatch();
@@ -61,7 +58,7 @@ const Create = (props) => {
         <div className="flex flex-col gap-8 items-center">
           <div className="flex gap-8 md:gap-16">
             <Image
-              src={AudioIcon}
+              src="/images/vector.svg"
               onClick={toggleSound}
               alt="audio control"
               width={30}
@@ -73,7 +70,7 @@ const Create = (props) => {
               className="w-56 h-56 object-cover bg-black rounded-full"
             />
             <Image
-              src={VideoIcon}
+              src="/images/vector-1.svg"
               onClick={toggleVideo}
               alt="video control"
               width={30}
