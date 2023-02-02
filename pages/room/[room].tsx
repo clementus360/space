@@ -53,10 +53,15 @@ export default function Room() {
     });
 
     socket.on("new-consumer", async (data) => {
-      const stream = await consumerInitializations(data);
-      setTracks((track) => {
-        return [...track, stream];
+      await consumerInitializations(data).then((stream) => {
+        console.log(stream);
+        setTracks((track) => {
+          console.log(track);
+          return [...track, stream];
+        });
       });
+
+      console.log(tracks);
     });
   }, []);
 
@@ -69,14 +74,18 @@ export default function Room() {
             stream={myStream}
             muted={true}
           />
-          {tracks.map((stream, idx) => (
-            <Display
-              key={idx}
-              userName={"aaaaaa"}
-              stream={stream}
-              muted={true}
-            />
-          ))}
+          {tracks.map((stream, idx) => {
+            console.log(stream);
+
+            return (
+              <Display
+                key={idx}
+                userName={"aaaaaa"}
+                stream={stream}
+                muted={true}
+              />
+            );
+          })}
         </section>
         <section className="bg-darkGrey w-full p-4 rounded-md flex flex-col items-center">
           <div className="flex items-center gap-2 mb-4">

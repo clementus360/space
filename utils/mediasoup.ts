@@ -42,6 +42,7 @@ const deviceInitialization = async (message, socket) => {
           "connect",
           async ({ dtlsParameters }, callback, errback) => {
             console.log("1");
+            console.log(dtlsParameters);
             // Signal local DTLS parameters to the server side transport.
             try {
               socket.emit("snd-parameters", {
@@ -61,6 +62,7 @@ const deviceInitialization = async (message, socket) => {
           async ({ dtlsParameters }, callback, errback) => {
             console.log("it just works");
             // Signal local DTLS parameters to the server side transport.
+            console.log(dtlsParameters);
             try {
               socket.emit("rcv-parameters", {
                 parameters: dtlsParameters,
@@ -108,14 +110,6 @@ const producerInitialization = async (stream: MediaStream, socket) => {
 
   videoProducer = await sndTransport.produce({
     track: videoTrack,
-    encodings: [
-      { maxBitrate: 100000 },
-      { maxBitrate: 300000 },
-      { maxBitrate: 900000 },
-    ],
-    codecOptions: {
-      videoGoogleStartBitrate: 1000,
-    },
   });
 };
 
@@ -131,8 +125,6 @@ const consumerInitializations = async (data) => {
   const { track } = consumer;
 
   const stream = new MediaStream([track]);
-
-  console.log(stream);
 
   return stream;
 };
