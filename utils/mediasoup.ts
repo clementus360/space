@@ -8,7 +8,6 @@ import {
 } from "mediasoup-client";
 
 import { Producer, Consumer, Transport } from "mediasoup-client/lib/types";
-import { Stream } from "stream";
 
 let videoProducer: Producer;
 let consumer: Consumer;
