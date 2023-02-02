@@ -11,6 +11,9 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 
+import VideoIcon from "../public/images/vector-1.svg";
+import AudioIcon from "../public/images/vector.svg";
+
 export default function Home() {
   const mediaConstraints = useAppSelector((state) => state.mediaConstraints);
   const dispatch = useAppDispatch();
@@ -38,7 +41,7 @@ export default function Home() {
         <div className="flex flex-col gap-16 items-center">
           <div className="flex gap-8 md:gap-16">
             <Image
-              src="/images/vector.svg"
+              src={AudioIcon}
               onClick={toggleSound}
               alt="audio control"
               width={30}
@@ -50,7 +53,7 @@ export default function Home() {
               className="w-56 h-56 object-cover bg-black rounded-full"
             />
             <Image
-              src="/images/vector-1.svg"
+              src={VideoIcon}
               onClick={toggleVideo}
               alt="video control"
               width={30}
