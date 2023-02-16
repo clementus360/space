@@ -12,7 +12,7 @@ export default function Display({ userName, stream, muted }) {
       <video
         ref={userVideo}
         autoPlay
-        className="w-24 h-24 object-cover max-w-none md:w-32 md:h-32 bg-darkBlack border-4 border-darkGreen rounded-full"
+        className="w-24 h-24 scale-x-[-1] object-cover max-w-none md:w-32 md:h-32 bg-darkBlack border-4 border-darkGreen rounded-full"
       />
       <p>{userName}</p>
     </div>

@@ -47,7 +47,7 @@ export default function Home() {
             <video
               ref={userVideo}
               autoPlay
-              className="w-56 h-56 object-cover bg-black rounded-full"
+              className="w-56 h-56 scale-x-[-1] object-cover bg-black rounded-full"
             />
             <Image
               src="/images/video.svg"
