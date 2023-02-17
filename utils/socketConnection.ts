@@ -12,6 +12,7 @@ const config = {
 };
 
 function socketInitialization() {
+  console.log(process.env.PROD_AWS_URL);
   return io(process.env.PROD_AWS_URL);
   // return io(process.env.DEV_URL);
 }
