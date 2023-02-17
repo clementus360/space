@@ -25,11 +25,14 @@ COPY --from=builder /app/public ./public
 COPY --from=builder /app/package.json ./package.json
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+COPY env.list ./
+RUN set -o allexport; source env.list; set +o allexport
 
 USER nextjs
 
 EXPOSE 3000
 
 ENV PORT 3000
+ENV AWS_URL=$AWS_URL
 
 CMD ["node", "server.js"]
