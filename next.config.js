@@ -3,7 +3,7 @@
 const nextConfig = {
   reactStrictMode: false,
   env: {
-    AWS_URL: process.env.PROD_AWS_URL,
+    PROD_AWS_URL: process.env.PROD_AWS_URL,
   },
 };
 
